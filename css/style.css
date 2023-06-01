@@ -1,0 +1,111 @@
+body {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0 250px;
+  background-color: rgb(0, 0, 0);
+}
+
+.content {
+  background-color: rgb(255, 251, 241);
+  flex: 1;
+  width: 70vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calc-container {
+  border: 1px solid rgb(56, 56, 56);
+  background-color: #000;
+  height: 720px;
+  width: 460px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 2%;
+}
+
+.display {
+  border: 1px solid rgb(56, 56, 56);
+  background-color: #D4D5B6;
+  min-height: 100px;
+  flex: 1;
+  padding: 6px 10px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 2%;
+}
+
+.display p {
+  margin: 0;
+}
+
+.input-display {
+  font-size: 20px;
+}
+
+.result-display {
+  font-size: 40px;
+  align-self: flex-end;
+}
+
+button {
+  height: 100px;
+  width: 100px;
+  font-size: 35px;
+  background-color: #809296;
+  color: #fff;
+  border: #809296;
+  border-radius: 2%;
+  box-shadow: 0 0 3px #fff;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:active {
+  background-color: #769aa1;
+  box-shadow: 0 0 4px #fff;
+}
+
+.btn-clear {
+  background-color: #7c0101;
+}
+
+.btn-clear:active {
+  background-color: #960101;
+}
+
+.btn-zero {
+  width: 220px;
+}
+
+.btn-equals {
+  background-color: #7c5f01;
+}
+
+.btn-equals:active {
+  background-color: #8f7111;
+}
+
+.btn-plus, .btn-equals {
+  height: 220px;
+}
+ 
+.btn-container {
+  display: flex;
+  flex: 1;
+  padding-top: 30px;
+}
+
+.btn-container-left, .btn-container-right {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 20px;
+}

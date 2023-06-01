@@ -1,3 +1,4 @@
+const buttons = document.querySelectorAll('button');
 let firstNum;
 let secondNum;
 let operator;
@@ -35,3 +36,32 @@ function operate(operator, firstNum, secondNum) {
       divide(firstNum, secondNum);
   };
 }
+let operatorActive = true;
+
+buttons.forEach(btn => 
+  btn.addEventListener('click', e => {
+    const inputDisplay = document.querySelector('.input-display');    
+    
+    let btnType = 
+      e.target.classList.contains('digit') ? 'digit' : 
+      e.target.classList.contains('operator') ? 'operator' :
+      false;
+
+    switch (btnType) {
+      case 'digit':
+        operatorActive = false;
+        inputDisplay.textContent += e.target.dataset.btn;
+        break;
+      case 'operator':   
+        if (operatorActive) {
+          let currentDisplay = inputDisplay.textContent.split('').slice(0, -2).join('');
+          inputDisplay.textContent = currentDisplay + ` ${e.target.textContent} `;
+        } else {
+          inputDisplay.textContent += ` ${e.target.textContent} `;
+          operatorActive = true;
+        }
+        
+        
+        break;
+    }
+  }));
