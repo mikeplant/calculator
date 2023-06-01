@@ -1,4 +1,8 @@
 const buttons = document.querySelectorAll('button');
+const firstNumDisplay = document.querySelector('.first-num-display');
+const secondNumDisplay = document.querySelector('.second-num-display');
+const operatorDisplay = document.querySelector('.operator-display');
+const resultDisplay = document.querySelector('.result-display'); 
 let firstNum;
 let secondNum;
 let operator;
@@ -21,13 +25,19 @@ function divide(a, b) {
   result = a / b;
 }
 
-function clear(inputDisplay, resultDisplay) {
-  firstNum = 0;
-  secondNum = 0;
+function clearInputDisplay() {
+  firstNumDisplay.textContent = '';
+  secondNumDisplay.textContent = '';
+  operatorDisplay.textContent = '';
+}
+
+function clearAll(inputDisplay, resultDisplay) {
+  firstNum = '';
+  secondNum = '';
   operator = '';
   result = '';
-  inputDisplay.textContent = '';
   resultDisplay.textContent = '';
+  clearInputDisplay();
 }
 
 function operate(operator, firstNum, secondNum) {
@@ -44,13 +54,12 @@ function operate(operator, firstNum, secondNum) {
     case 'divide':
       divide(firstNum, secondNum);
   };
+  resultDisplay.textContent = result;
 }
-let operatorActive = true;
 
 buttons.forEach(btn => 
   btn.addEventListener('click', e => {
-    const inputDisplay = document.querySelector('.input-display');
-    const resultDisplay = document.querySelector('.result-display');  
+    const inputDisplay = document.querySelector('.input-display'); 
     let btnType = 
       e.target.classList.contains('digit') ? 'digit' : 
       e.target.classList.contains('operator') ? 'operator' :
@@ -60,30 +69,33 @@ buttons.forEach(btn =>
 
     switch (btnType) {
       case 'digit':
-        operatorActive = false;
-        inputDisplay.textContent += e.target.dataset.btn;
+        (!operator) ? 
+          firstNumDisplay.textContent += e.target.textContent :
+          secondNumDisplay.textContent += e.target.textContent;
         break;
       case 'operator':
-        firstNum = (result) ? result : parseInt(inputDisplay.textContent);
-        operator = e.target.dataset.btn;
-        if (operatorActive) {
-          let currentDisplay = inputDisplay.textContent.split('').slice(0, -2).join('');
-          inputDisplay.textContent = currentDisplay + ` ${e.target.textContent} `;
-        } else {
-          inputDisplay.textContent += ` ${e.target.textContent} `;
-          operatorActive = true;
+        firstNum = parseInt(firstNumDisplay.textContent);
+        if (!firstNum) break;
+        let operatorSymbol = e.target.textContent;
+        if (!isNaN(secondNum) || secondNumDisplay.textContent !== '') secondNum = parseInt(secondNumDisplay.textContent);
+        if(firstNum && secondNum) {
+          operate(operator, firstNum, secondNum);
+          firstNum = result;
+          secondNum = '';
+          clearInputDisplay()
+          firstNumDisplay.textContent = result;
+          operatorDisplay.textContent = operatorSymbol;
         }
+        operator = e.target.dataset.btn;
+        operatorDisplay.textContent = ` ${operatorSymbol} `;
         break;
       case 'clear':
-        clear(inputDisplay, resultDisplay);
+        clearAll(inputDisplay, resultDisplay);
         break;
       case 'operate':
-        secondNum = parseInt(inputDisplay.textContent
-          .split(' ')
-          .slice(-1)
-        );
-        if (isNaN(secondNum)) break;
-        operate(operator, firstNum, secondNum);
-        resultDisplay.textContent = result;
+        secondNum = parseInt(secondNumDisplay.textContent);
+        if (firstNum && secondNum && operator) operate(operator, firstNum, secondNum);
     }
   }));
+
+  // functions don't work with '0'
