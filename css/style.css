@@ -29,6 +29,7 @@ body {
 }
 
 .display {
+  font-family: 'Orbitron', sans-serif;
   border: 1px solid rgb(56, 56, 56);
   background-color: #D4D5B6;
   min-height: 100px;
@@ -53,6 +54,7 @@ body {
 }
 
 button {
+  font-family: 'Orbitron', sans-serif;
   height: 100px;
   width: 100px;
   font-size: 35px;
