@@ -71,9 +71,14 @@ function zeroByZero() {
   return (operator === 'divide' && firstNum === 0 && secondNum === 0) ? true : false;
 }
 
+function includesDecimal (display, char) {
+  return (display.textContent.includes('.') && char === '.') ? true : false;
+}
+
 buttons.forEach(btn => 
   btn.addEventListener('click', e => {
     const inputDisplay = document.querySelector('.input-display'); 
+    let char = e.target.textContent;
     let btnType = 
       e.target.classList.contains('digit') ? 'digit' : 
       e.target.classList.contains('operator') ? 'operator' :
@@ -83,15 +88,19 @@ buttons.forEach(btn =>
 
     switch (btnType) {
       case 'digit':
-        (!operator) ? 
-          populateDisplay(firstNumDisplay, e.target.textContent, 'concatenate') :
-          populateDisplay(secondNumDisplay, e.target.textContent, 'concatenate');
+        if (!operator) {
+          if (includesDecimal(firstNumDisplay, char)) break;
+          populateDisplay(firstNumDisplay, char, 'concatenate')
+        } else {
+          if (includesDecimal(secondNumDisplay, char)) break;
+          populateDisplay(secondNumDisplay, char, 'concatenate')
+        }
         break;
       case 'operator':
         firstNum = parseFloat(firstNumDisplay.textContent);
         if (isNaN(firstNum)) break;
-        let operatorSymbol = e.target.textContent;
-        if (!isNaN(secondNum) || secondNumDisplay.textContent !== '') secondNum = parseFloat(secondNumDisplay.textContent);
+        let operatorSymbol = char;
+        if (!isNaN(secondNum)) secondNum = parseFloat(secondNumDisplay.textContent);
         if (!isNaN(firstNum) && !isNaN(secondNum)) {
           if (zeroByZero()) {
             operate(operator, firstNum, secondNum);
