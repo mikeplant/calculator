@@ -31,7 +31,7 @@ function clearInputDisplay() {
   operatorDisplay.textContent = '';
 }
 
-function clearAll(inputDisplay, resultDisplay) {
+function clearAll() {
   firstNum = '';
   secondNum = '';
   operator = '';
@@ -41,6 +41,11 @@ function clearAll(inputDisplay, resultDisplay) {
 }
 
 function operate(operator, firstNum, secondNum) {
+  if(zeroByZero()) {
+    clearAll();
+    alert('Nice try! You can\'t divide 0 by 0');    
+    return;
+  };
   switch (operator) {
     case 'add': 
       add(firstNum, secondNum);
@@ -57,6 +62,15 @@ function operate(operator, firstNum, secondNum) {
   resultDisplay.textContent = result;
 }
 
+function populateDisplay(display, content, replaceOrConcatenate) {
+  if (replaceOrConcatenate === 'replace') display.textContent = content;
+  if (replaceOrConcatenate === 'concatenate') display.textContent += content;
+}
+
+function zeroByZero() {
+  return (operator === 'divide' && firstNum === 0 && secondNum === 0) ? true : false;
+}
+
 buttons.forEach(btn => 
   btn.addEventListener('click', e => {
     const inputDisplay = document.querySelector('.input-display'); 
@@ -70,32 +84,40 @@ buttons.forEach(btn =>
     switch (btnType) {
       case 'digit':
         (!operator) ? 
-          firstNumDisplay.textContent += e.target.textContent :
-          secondNumDisplay.textContent += e.target.textContent;
+          populateDisplay(firstNumDisplay, e.target.textContent, 'concatenate') :
+          populateDisplay(secondNumDisplay, e.target.textContent, 'concatenate');
         break;
       case 'operator':
-        firstNum = parseInt(firstNumDisplay.textContent);
-        if (!firstNum) break;
+        firstNum = parseFloat(firstNumDisplay.textContent);
+        if (isNaN(firstNum)) break;
         let operatorSymbol = e.target.textContent;
-        if (!isNaN(secondNum) || secondNumDisplay.textContent !== '') secondNum = parseInt(secondNumDisplay.textContent);
-        if(firstNum && secondNum) {
+        if (!isNaN(secondNum) || secondNumDisplay.textContent !== '') secondNum = parseFloat(secondNumDisplay.textContent);
+        if (!isNaN(firstNum) && !isNaN(secondNum)) {
+          if (zeroByZero()) {
+            operate(operator, firstNum, secondNum);
+            break;
+          };
           operate(operator, firstNum, secondNum);
           firstNum = result;
           secondNum = '';
-          clearInputDisplay()
-          firstNumDisplay.textContent = result;
-          operatorDisplay.textContent = operatorSymbol;
+          clearInputDisplay();
+          populateDisplay(firstNumDisplay, result, 'replace');
+          populateDisplay(operatorDisplay, operatorSymbol, 'replace');
         }
         operator = e.target.dataset.btn;
-        operatorDisplay.textContent = ` ${operatorSymbol} `;
+        populateDisplay(operatorDisplay, ` ${operatorSymbol} `, 'replace');
         break;
       case 'clear':
-        clearAll(inputDisplay, resultDisplay);
+        clearAll();
         break;
       case 'operate':
-        secondNum = parseInt(secondNumDisplay.textContent);
-        if (firstNum && secondNum && operator) operate(operator, firstNum, secondNum);
+        secondNum = parseFloat(secondNumDisplay.textContent);
+        if (!isNaN(firstNum) && !isNaN(secondNum) && operator) operate(operator, firstNum, secondNum);
     }
   }));
 
-  // functions don't work with '0'
+  // number divided by 0 returns infinity (25)
+  // screen overflows - limit number of digits
+  // round decimals
+  // user able to keep adding digits after operate button is pressed
+  // add back button?
