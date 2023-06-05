@@ -3,10 +3,10 @@ const firstNumDisplay = document.querySelector('.first-num-display');
 const secondNumDisplay = document.querySelector('.second-num-display');
 const operatorDisplay = document.querySelector('.operator-display');
 const resultDisplay = document.querySelector('.result-display'); 
-let firstNum;
-let secondNum;
-let operator;
-let result;
+let firstNum = '';
+let secondNum = '';
+let operator = '';
+let result = '';
 
 
 function add(a, b) {
@@ -62,7 +62,7 @@ function operate(operator, firstNum, secondNum) {
   resultDisplay.textContent = result;
 }
 
-function populateDisplay(display, content, replaceOrConcatenate) {
+function updateDisplay(display, content, replaceOrConcatenate) {
   if (replaceOrConcatenate === 'replace') display.textContent = content;
   if (replaceOrConcatenate === 'concatenate') display.textContent += content;
 }
@@ -77,31 +77,31 @@ function includesDecimal (display, char) {
 
 buttons.forEach(btn => 
   btn.addEventListener('click', e => {
-    const inputDisplay = document.querySelector('.input-display'); 
     let char = e.target.textContent;
     let btnType = 
       e.target.classList.contains('digit') ? 'digit' : 
       e.target.classList.contains('operator') ? 'operator' :
       e.target.classList.contains('btn-equals') ? 'operate' :
       e.target.classList.contains('btn-clear') ? 'clear' :
+      e.target.classList.contains('btn-delete') ? 'delete' :
       '';
 
     switch (btnType) {
       case 'digit':
         if (!operator) {
-          if (includesDecimal(firstNumDisplay, char)) break;
-          populateDisplay(firstNumDisplay, char, 'concatenate')
+          if (includesDecimal(firstNumDisplay, char) || firstNumDisplay.textContent.length > 10) break;
+          updateDisplay(firstNumDisplay, char, 'concatenate')
         } else {
-          if (includesDecimal(secondNumDisplay, char)) break;
-          populateDisplay(secondNumDisplay, char, 'concatenate')
+          if (includesDecimal(secondNumDisplay, char) || secondNumDisplay.textContent.length > 10) break;
+          updateDisplay(secondNumDisplay, char, 'concatenate')
         }
         break;
       case 'operator':
         firstNum = parseFloat(firstNumDisplay.textContent);
         if (isNaN(firstNum)) break;
         let operatorSymbol = char;
-        if (!isNaN(secondNum)) secondNum = parseFloat(secondNumDisplay.textContent);
-        if (!isNaN(firstNum) && !isNaN(secondNum)) {
+        if (!isNaN(firstNum) && operator != '') secondNum = parseFloat(secondNumDisplay.textContent);
+        if (((!isNaN(firstNum) && !isNaN(secondNum) && (firstNum !== '' && secondNum !== '')))) {
           if (zeroByZero()) {
             operate(operator, firstNum, secondNum);
             break;
@@ -110,23 +110,39 @@ buttons.forEach(btn =>
           firstNum = result;
           secondNum = '';
           clearInputDisplay();
-          populateDisplay(firstNumDisplay, result, 'replace');
-          populateDisplay(operatorDisplay, operatorSymbol, 'replace');
+          updateDisplay(firstNumDisplay, result, 'replace');
+          updateDisplay(operatorDisplay, operatorSymbol, 'replace');
         }
         operator = e.target.dataset.btn;
-        populateDisplay(operatorDisplay, ` ${operatorSymbol} `, 'replace');
+        updateDisplay(operatorDisplay, ` ${operatorSymbol} `, 'replace');
         break;
       case 'clear':
         clearAll();
         break;
+      case 'delete':
+        if (secondNumDisplay.textContent !== '') {
+          deleteChar(secondNumDisplay, 'second');
+          break;
+        }
+        if (operatorDisplay.textContent !== '') {
+          deleteChar(operatorDisplay, 'op');
+          break;
+        }
+        if (firstNumDisplay.textContent !== '') {
+          deleteChar(firstNumDisplay, 'first');
+          break;
+        }
       case 'operate':
         secondNum = parseFloat(secondNumDisplay.textContent);
         if (!isNaN(firstNum) && !isNaN(secondNum) && operator) operate(operator, firstNum, secondNum);
     }
   }));
 
-  // number divided by 0 returns infinity (25)
-  // screen overflows - limit number of digits
-  // round decimals
-  // user able to keep adding digits after operate button is pressed
-  // add back button?
+  function deleteChar(display, value) {
+    let charToDelete = (display === operatorDisplay) ? '' : display.textContent.split('').slice(0, -1).join('');
+    updateDisplay(display, charToDelete, 'replace');
+
+    if (value == 'second') secondNum = parseFloat(display.textContent);
+    if (value == 'first') firstNum = parseFloat(display.textContent);
+    if (value == 'op') operator = '';
+  }

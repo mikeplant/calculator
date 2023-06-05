@@ -4,11 +4,12 @@ body {
   justify-content: center;
   height: 100vh;
   margin: 0;
-  padding: 0 250px;
-  background-color: rgb(0, 0, 0);
+  padding: 0;
+  background-color: rgb(255, 255, 255);
 }
 
 .content {
+  background-image: url(../images/notebook.png);
   background-color: rgb(255, 251, 241);
   flex: 1;
   width: 70vw;
@@ -19,13 +20,14 @@ body {
 
 .calc-container {
   border: 1px solid rgb(56, 56, 56);
-  background-color: #1f1f1f;
-  min-height: 720px;
-  width: 460px;
+  background-color: rgb(44, 44, 44);
+  box-shadow: 0 0 15px #313131;
+  min-height: 540px;
+  width: 345px;
   display: flex;
   flex-direction: column;
   padding: 30px;
-  border-radius: 2%;
+  border-radius: 25px;
 }
 
 .display {
@@ -33,13 +35,12 @@ body {
   border: 1px solid rgb(56, 56, 56);
   box-shadow: 0 0 8px 3px inset #96977e;
   background-color: #D4D5B6;
-  min-height: 100px;
-  flex: 1;
   padding: 6px 10px;
+  flex: 1 0 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 2%;
+  border-radius: 10px;
 }
 
 .display p {
@@ -47,67 +48,98 @@ body {
 }
 
 .input-display {
-  font-size: 22px;
-  
+  font-size: 20px;
+  min-height: 25px;
+  border-bottom: 1px dotted #b9b99f;
 }
 
-
 .result-display {
-  font-size: 45px;
+  font-size: 36px;
+  text-align: end;
+  word-wrap: break-word;
+  word-break: break-word;
   align-self: flex-end;
 }
 
 button {
   font-family: 'Orbitron', sans-serif;
-  height: 100px;
-  width: 100px;
+  height: 75px;
+  width: 75px;
   font-size: 35px;
   background-color: #809296;
   color: #fff;
-  border: #000000;
-  border-radius: 2%;
-  box-shadow: 0 0 3px #bdbdbd;
+  border:#000000;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #809296;
 }
 
 button:hover {
   cursor: pointer;
+  
 }
 
 button:active {
-  background-color: #95aaaf;
-  box-shadow: 0 0 4px #fff;
+  background-color: rgb(107, 122, 126);
+  box-shadow: inset 0 0 10px #303030;
+  border-radius: 8px;
+  font-size: 33px;
+}
+.clear-back-container {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.btn-clear, .btn-delete {
+  height: 31px;
+  font-size: 18px;
 }
 
 .btn-clear {
   background-color: #7c0101;
+  box-shadow: 0 0 0 1px #7c0101;
+}
+
+.btn-delete {
+  background-color: #863e03;
+  box-shadow: 0 0 0 1px #863e03;
 }
 
 .btn-clear:active {
-  background-color: #960101;
+  background-color: rgb(112, 1, 1);
+  font-size: 17px;
+}
+
+.btn-delete:active {
+  background-color: #773702;
+  font-size: 17px;
 }
 
 .btn-zero {
-  width: 220px;
+  width: 165px;
 }
 
 .btn-equals {
   background-color: #7c5f01;
+  box-shadow: 0 0 0 1px #7c5f01;
 }
 
 .btn-equals:active {
-  background-color: #8f7111;
+  background-color: #695101;
+  box-shadow: inset 0 0 10px #303030;
 }
 
 .btn-plus, .btn-equals {
-  height: 220px;
+  height: 165px;
 }
 
 .operator {
   background-color: #464f52;
+  box-shadow: 0 0 0 1px #464f52;
 }
  
 .operator:active {
-  background-color: #69777c;
+  background-color: #424a4d;
 }
 .btn-container {
   display: flex;
@@ -118,7 +150,6 @@ button:active {
 .btn-container-left, .btn-container-right {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: center; */
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
